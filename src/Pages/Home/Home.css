@@ -1,0 +1,12 @@
+.home {
+  min-height: 100vh;
+  color: white;
+}
+
+.home > .row {
+  margin-left: 20px;
+}
+
+.home > .row:not(:first-child) {
+  margin-top: -100px;
+}
