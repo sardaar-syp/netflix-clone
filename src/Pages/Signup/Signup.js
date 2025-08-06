@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Button, TextField, Typography, Box, CircularProgress } from '@mui/material';
 import { auth } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-// If you're using styled components or MUI styled, define them below if needed
-// Otherwise, remove unused ones to keep code clean
+// Styled components (example, customize as needed)
+const FormContainer = styled(Box)(({ theme }) => ({
+  maxWidth: 400,
+  margin: 'auto',
+  padding: theme.spacing(4),
+  boxShadow: theme.shadows[3],
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const ErrorText = styled(Typography)({
+  color: 'red',
+  marginTop: '8px',
+});
 
 function Signup() {
   const navigate = useNavigate();
@@ -17,7 +29,7 @@ function Signup() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !password || !confirmPassword) {
       setError('Please fill in all fields');
       return;
@@ -38,7 +50,7 @@ function Signup() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/home');
+      navigate('/home'); // navigate after signup
     } catch (err) {
       console.error('Registration error:', err);
       switch (err.code) {
@@ -59,8 +71,77 @@ function Signup() {
     }
   };
 
-  // You would render your signup form here...
-  // Make sure to include the JSX for form, inputs, error messages, and loading states
+  return (
+    <FormContainer component="form" onSubmit={handleSignUp}>
+      <Typography variant="h5" component="h1" gutterBottom>
+        Sign Up
+      </Typography>
+
+      <TextField
+        label="Email"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        type="email"
+        required
+      />
+
+      <TextField
+        label="Password"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        type="password"
+        required
+      />
+
+      <TextField
+        label="Confirm Password"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        type="password"
+        required
+      />
+
+      {error && <ErrorText>{error}</ErrorText>}
+
+      <Box mt={2} position="relative">
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isLoading}
+          fullWidth
+        >
+          Sign Up
+        </Button>
+        {isLoading && (
+          <CircularProgress
+            size={24}
+            sx={{
+              color: 'primary.main',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-12px',
+              marginLeft: '-12px',
+            }}
+          />
+        )}
+      </Box>
+
+      <Typography variant="body2" align="center" mt={2}>
+        Already have an account? <Link to="/login">Log in</Link>
+      </Typography>
+    </FormContainer>
+  );
 }
 
 export default Signup;
