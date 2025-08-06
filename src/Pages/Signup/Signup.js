@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import { Button, TextField, Typography, Box, CircularProgress } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { auth } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-// ... (keep all styled components the same)
+// If you're using styled components or MUI styled, define them below if needed
+// Otherwise, remove unused ones to keep code clean
 
 function Signup() {
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ function Signup() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      // Directly navigate to home page after successful signup
       navigate('/home');
     } catch (err) {
       console.error('Registration error:', err);
@@ -60,7 +59,8 @@ function Signup() {
     }
   };
 
-  // ... (keep the rest of your JSX the same)
+  // You would render your signup form here...
+  // Make sure to include the JSX for form, inputs, error messages, and loading states
 }
 
 export default Signup;
